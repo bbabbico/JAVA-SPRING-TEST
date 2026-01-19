@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="projecttest.javaspringtest.Database.mybatis.MybatisMemberRepository">
+
+    <resultMap id="MemberResultMap" type="projecttest.javaspringtest.Database.mybatis.MybatisMember">
+        <id     property="id"      column="id"/>
+        <result property="loginid" column="loginid"/>
+        <result property="password" column="password"/>
+        <result property="role"    column="role"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="projecttest.javaspringtest.Database.mybatis.MybatisMember"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO member (loginid, password, role)
+        VALUES (#{loginid}, #{password}, #{role})
+    </insert>
+
+    <select id="findById" resultMap="MemberResultMap" parameterType="long">
+        SELECT id, loginid, password, role
+        FROM member
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByLoginid" resultMap="MemberResultMap" parameterType="string">
+        SELECT id, loginid, password, role
+        FROM member
+        WHERE loginid = #{loginid}
+    </select>
+
+    <select id="findAll" resultMap="MemberResultMap">
+        SELECT id, loginid, password, role
+        FROM member
+        ORDER BY id DESC
+    </select>
+
+    <update id="update" parameterType="projecttest.javaspringtest.Database.mybatis.MybatisMember">
+        UPDATE member
+        SET loginid = #{loginid},
+            password = #{password},
+            role = #{role}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM member WHERE id = #{id}
+    </delete>
+
+</mapper>

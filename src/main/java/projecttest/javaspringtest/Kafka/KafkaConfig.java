@@ -61,39 +61,39 @@ public class KafkaConfig {
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory(
-            ConsumerFactory<String, String> consumerFactory) {
-        ConcurrentKafkaListenerContainerFactory<String, String> factory =
-                new ConcurrentKafkaListenerContainerFactory<>();
-
-        // Consumer 팩토리 설정
-        factory.setConsumerFactory(consumerFactory);
-
-        // 동시성 설정 - 3개의 스레드로 병렬 처리
-        factory.setConcurrency(3);
-
-        // 자동 시작 설정
-        factory.setAutoStartup(true);
-
-        // 배치 처리 모드 설정
-        factory.setBatchListener(true);
-
-        // 승인 모드 설정 - 배치 단위로 커밋
-        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.BATCH);
-
-        // 에러 핸들러 설정
-        factory.setCommonErrorHandler(new DefaultErrorHandler(
-                (consumerRecord, exception) -> {
-                    log.error("Error in processing: {}", exception.getMessage());
-                    log.error("Failed record: {}", consumerRecord);
-
-                    // 추가적인 에러 처리 로직
-                    // 예: 데드 레터 큐로 전송, 알림 발송 등
-                }
-        ));
-
-        return factory;
-    }
+//    @Bean
+//    public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory(
+//            ConsumerFactory<String, String> consumerFactory) {
+//        ConcurrentKafkaListenerContainerFactory<String, String> factory =
+//                new ConcurrentKafkaListenerContainerFactory<>();
+//
+//        // Consumer 팩토리 설정
+//        factory.setConsumerFactory(consumerFactory);
+//
+//        // 동시성 설정 - 3개의 스레드로 병렬 처리
+//        factory.setConcurrency(3);
+//
+//        // 자동 시작 설정
+//        factory.setAutoStartup(true);
+//
+//        // 배치 처리 모드 설정
+//        factory.setBatchListener(true);
+//
+//        // 승인 모드 설정 - 배치 단위로 커밋
+//        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.BATCH);
+//
+//        // 에러 핸들러 설정
+//        factory.setCommonErrorHandler(new DefaultErrorHandler(
+//                (consumerRecord, exception) -> {
+//                    log.error("Error in processing: {}", exception.getMessage());
+//                    log.error("Failed record: {}", consumerRecord);
+//
+//                    // 추가적인 에러 처리 로직
+//                    // 예: 데드 레터 큐로 전송, 알림 발송 등
+//                }
+//        ));
+//
+//        return factory;
+//    }
 
 }

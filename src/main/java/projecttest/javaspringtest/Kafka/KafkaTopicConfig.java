@@ -7,6 +7,8 @@ import org.springframework.kafka.config.TopicBuilder;
 
 @Configuration
 public class KafkaTopicConfig {
+    public static final String ORDER_TOPIC = "order-topic";
+    public static final String USER_TOPIC  = "user-topic";
 
     @Bean
     public NewTopic exampleTopic() {
@@ -14,5 +16,15 @@ public class KafkaTopicConfig {
                 .partitions(1)
                 .replicas(1)
                 .build();
+    }
+
+    @Bean
+    public NewTopic orderTopic() {
+        return TopicBuilder.name(ORDER_TOPIC).partitions(1).replicas(1).build();
+    }
+
+    @Bean
+    public NewTopic userTopic() {
+        return TopicBuilder.name(USER_TOPIC).partitions(1).replicas(1).build();
     }
 }

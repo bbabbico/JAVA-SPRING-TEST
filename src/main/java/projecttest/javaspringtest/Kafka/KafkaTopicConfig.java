@@ -7,7 +7,7 @@ import org.springframework.kafka.config.TopicBuilder;
 
 @Configuration
 public class KafkaTopicConfig {
-    public static final String ORDER_TOPIC = "order-topic";
+    public static final String MYBATIS_TOPIC = "mybatis-member-insert-topic";
     public static final String USER_TOPIC  = "user-topic";
 
     @Bean
@@ -20,7 +20,7 @@ public class KafkaTopicConfig {
 
     @Bean
     public NewTopic orderTopic() {
-        return TopicBuilder.name(ORDER_TOPIC).partitions(1).replicas(1).build();
+        return TopicBuilder.name(MYBATIS_TOPIC).partitions(1).replicas(1).build();
     }
 
     @Bean

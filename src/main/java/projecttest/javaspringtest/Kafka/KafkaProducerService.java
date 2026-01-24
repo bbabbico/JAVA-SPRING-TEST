@@ -3,8 +3,10 @@ package projecttest.javaspringtest.Kafka;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import projecttest.javaspringtest.Kafka.Dto.OrderDto;
+import projecttest.javaspringtest.Database.Mybatis.MybatisMember;
 import projecttest.javaspringtest.Kafka.Dto.UserDto;
+
+import static projecttest.javaspringtest.Kafka.KafkaTopicConfig.MYBATIS_TOPIC;
 
 @Service
 @RequiredArgsConstructor
@@ -15,8 +17,8 @@ public class KafkaProducerService {
         kafkaTemplate.send(topic, message);
     }
 
-    public void sendOrder(OrderDto dto) {
-        kafkaTemplate.send("order-topic", dto.getOrderId(), dto);
+    public void sendMybatisMember(MybatisMember member) {
+        kafkaTemplate.send(MYBATIS_TOPIC, member);
     }
 
     public void sendUser(UserDto dto) {

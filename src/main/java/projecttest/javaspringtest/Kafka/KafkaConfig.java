@@ -18,7 +18,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
 import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
 
-import projecttest.javaspringtest.Kafka.Dto.OrderDto;
+import projecttest.javaspringtest.Database.Mybatis.MybatisMember;
 import projecttest.javaspringtest.Kafka.Dto.UserDto;
 
 @Configuration
@@ -46,19 +46,19 @@ public class KafkaConfig {
         return new KafkaTemplate<>(pf);
     }
 
-    // Consumer (OrderDto)
+    // Consumer (MybatisMember)
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, OrderDto> orderKafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, MybatisMember> MybatisMemberInsertKafkaListenerContainerFactory() {
         Map<String, Object> props = kafkaProperties.buildConsumerProperties();
 
-        var valueDeserializer = new JacksonJsonDeserializer<>(OrderDto.class)
+        var valueDeserializer = new JacksonJsonDeserializer<>(MybatisMember.class)
                 .ignoreTypeHeaders()
                 .trustedPackages("com.example.demo.kafka");
 
-        ConsumerFactory<String, OrderDto> cf =
+        ConsumerFactory<String, MybatisMember> cf =
                 new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), valueDeserializer);
 
-        var factory = new ConcurrentKafkaListenerContainerFactory<String, OrderDto>();
+        var factory = new ConcurrentKafkaListenerContainerFactory<String, MybatisMember>();
         factory.setConsumerFactory(cf);
         return factory;
     }

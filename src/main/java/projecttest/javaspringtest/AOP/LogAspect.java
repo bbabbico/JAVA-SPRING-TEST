@@ -1,11 +1,14 @@
 package projecttest.javaspringtest.AOP;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 
+@Slf4j
 @Component // 스프링 빈으로 등록
 @Aspect    // AOP Aspect임을 명시
 public class LogAspect {
@@ -29,21 +32,52 @@ public class LogAspect {
      * {@code @annotation(com.example.annotation.LogExecutionTime)} <br>
      */
     // @LogExecutionTime 어노테이션이 붙은 메소드에 적용
+    // 메서드 실행시간 출력 메서드
     @Around("@annotation(LogExecutionTime) && bean(*Service)")
-    public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
-        long start = System.currentTimeMillis();
+    public Object measureExecutionTime(
+            ProceedingJoinPoint joinPoint) throws Throwable {
 
-        System.out.println("메서드 시작 : " + joinPoint.toString());
+        StopWatch stopWatch = new StopWatch();
+        String methodName = joinPoint.getSignature().toShortString();
 
         try {
+            stopWatch.start(methodName);
+
             // 실제 타겟 메소드 실행 (proceed를 호출해야 원래 로직이 돌아감)
             return joinPoint.proceed();
         } finally {
-            long finish = System.currentTimeMillis();
-            long timeMs = finish - start;
-            System.out.println("메서드 종료 : " + joinPoint.toString() + " " + timeMs + "ms");
+            stopWatch.stop();
+
+            log.debug("""
+                    
+                    ┌──────────────────────────────────────────────┐
+                    │ ⏱️  실행 시간 측정 결과                         │
+                    ├──────────────────────────────────────────────┤
+                    │ 메서드: {}
+                    │ 소요 시간: {} ms
+                    └──────────────────────────────────────────────┘""",methodName,stopWatch.getTotalTimeMillis());
         }
     }
+
+
+    // 슬로우 쿼리 감지 (500ms 이상)
+    @Around("execution(* projecttest.javaspringtest.*.*(..))")
+    public Object detectSlowQuery(ProceedingJoinPoint joinPoint) throws Throwable {
+        long start = System.currentTimeMillis();
+
+        try {
+            return joinPoint.proceed();
+        } finally {
+            long executionTime = System.currentTimeMillis() - start;
+
+            if (executionTime > 500) {
+                log.debug("🐢 슬로우 쿼리 감지! 메서드: {}, 소요시간: {}ms",
+                        joinPoint.getSignature().toShortString(), executionTime);
+            }
+        }
+    }
+
+    /*
 
     // ═══════════════════════════════════════════════════════════════
     //                      Pointcut 표현식 예시, execution [일반적으로 Advice 에너테이션 안에 Pointcut을 작성해도됨. 밑에는 @Pointcut 으로 예시만 작성한것.]
@@ -128,4 +162,6 @@ public class LogAspect {
     // NOT
     @Pointcut("execution(* projecttest.javaspringtest.AOP.*.*(..)) && !execution(* *.get*(..))")
     public void serviceMethodsExceptGetters() {}
+
+    */
 }

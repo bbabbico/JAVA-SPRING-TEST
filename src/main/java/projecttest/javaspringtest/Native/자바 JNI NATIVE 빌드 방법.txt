@@ -1,0 +1,12 @@
+x64 Native Tools Command Prompt for VS 2019 이걸로 빌드해야 됨. 비주얼 스튜디오 다운해야 있음
+
+C 언어 파일 헤더파일 생성
+javac -d out -h Native src/main/java/projecttest/javaspringtest/Native/TestJNI.java
+
+cd c언어 파일 절대 경로
+
+JAVA_HOME 경로 일시 변경
+set JAVA_HOME=C:\Program Files\Java\jdk-21
+
+dll 파일 생성
+cl /I"%JAVA_HOME%\include" /I"%JAVA_HOME%\include\win32" /LD TestJNI.c /Fe:TestJNI.dll

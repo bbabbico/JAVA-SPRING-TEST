@@ -3,6 +3,7 @@ package projecttest.javaspringtest.AOP;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 @Component // 스프링 빈으로 등록
@@ -28,7 +29,7 @@ public class LogAspect {
      * {@code @annotation(com.example.annotation.LogExecutionTime)} <br>
      */
     // @LogExecutionTime 어노테이션이 붙은 메소드에 적용
-    @Around("@annotation(LogExecutionTime)")
+    @Around("@annotation(LogExecutionTime) && bean(*Service)")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
 
@@ -43,4 +44,88 @@ public class LogAspect {
             System.out.println("메서드 종료 : " + joinPoint.toString() + " " + timeMs + "ms");
         }
     }
+
+    // ═══════════════════════════════════════════════════════════════
+    //                      Pointcut 표현식 예시, execution [일반적으로 Advice 에너테이션 안에 Pointcut을 작성해도됨. 밑에는 @Pointcut 으로 예시만 작성한것.]
+    // ═══════════════════════════════════════════════════════════════
+
+    // 모든 public 메서드
+    @Pointcut("execution(public * *(..))")
+    public void allPublicMethods() {}
+
+    // service 패키지의 모든 메서드
+    @Pointcut("execution(* projecttest.javaspringtest.AOP.*.*(..))")
+    public void serviceMethods() {}
+
+    // service 패키지와 하위 패키지의 모든 메서드
+    @Pointcut("execution(* projecttest.javaspringtest.AOP..*.*(..))")
+    public void serviceAndSubPackageMethods() {}
+
+    // String을 반환하는 모든 메서드
+    @Pointcut("execution(String *(..))")
+    public void stringReturnMethods() {}
+
+    // 파라미터가 없는 메서드
+    @Pointcut("execution(* *())")
+    public void noParamMethods() {}
+
+    // 첫 번째 파라미터가 String인 메서드
+    @Pointcut("execution(* *(String, ..))")
+    public void firstParamStringMethods() {}
+
+    // 정확히 2개의 파라미터를 받는 메서드
+    @Pointcut("execution(* *(*, *))")
+    public void twoParamMethods() {}
+
+    // ═══════════════════════════════════════════════════════════════
+    //                      within 표현식
+    // ═══════════════════════════════════════════════════════════════
+
+    // 특정 클래스 내 모든 메서드
+    @Pointcut("within(projecttest.javaspringtest.AOP.LogAopTestService)")
+    public void withinUserService() {}
+
+    // 특정 패키지 내 모든 클래스의 모든 메서드
+    @Pointcut("within(projecttest.javaspringtest.AOP.*)")
+    public void withinServicePackage() {}
+
+    // ═══════════════════════════════════════════════════════════════
+    //                      @annotation 표현식
+    // ═══════════════════════════════════════════════════════════════
+
+    // 특정 어노테이션이 붙은 메서드
+    @Pointcut("@annotation(projecttest.javaspringtest.AOP.LogExecutionTime)")
+    public void loggableMethods() {}
+
+    // @Transactional 어노테이션이 붙은 메서드
+    @Pointcut("@annotation(org.springframework.transaction.annotation.Transactional)")
+    public void transactionalMethods() {}
+
+    // ═══════════════════════════════════════════════════════════════
+    //                      bean 표현식
+    // ═══════════════════════════════════════════════════════════════
+
+    // 특정 빈 이름의 모든 메서드
+    @Pointcut("bean(userService)")
+    public void userServiceBean() {}
+
+    // 이름이 Service로 끝나는 빈의 모든 메서드
+    @Pointcut("bean(*Service)")
+    public void serviceBeans() {}
+
+    // ═══════════════════════════════════════════════════════════════
+    //                      조합 표현식
+    // ═══════════════════════════════════════════════════════════════
+
+    // AND 조합
+    @Pointcut("execution(* projecttest.javaspringtest.AOP.*.*(..)) && @annotation(LogExecutionTime)")
+    public void loggableServiceMethods() {}
+
+    // OR 조합
+    @Pointcut("execution(* projecttest.javaspringtest.AOP.*.*(..)) || execution(* projecttest.javaspringtest.Controller.*.*(..))")
+    public void serviceOrRepositoryMethods() {}
+
+    // NOT
+    @Pointcut("execution(* projecttest.javaspringtest.AOP.*.*(..)) && !execution(* *.get*(..))")
+    public void serviceMethodsExceptGetters() {}
 }

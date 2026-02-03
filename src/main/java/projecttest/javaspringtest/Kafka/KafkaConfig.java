@@ -18,7 +18,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
 import org.springframework.kafka.support.serializer.JacksonJsonSerializer;
 
-import projecttest.javaspringtest.Database.Mybatis.MybatisMember;
+import projecttest.javaspringtest.Spring.Database.Mybatis.MybatisMember;
 import projecttest.javaspringtest.Kafka.Dto.UserDto;
 
 @Configuration

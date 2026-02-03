@@ -3,16 +3,16 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="projecttest.javaspringtest.Database.Mybatis.MybatisMemberRepository">
+<mapper namespace="projecttest.javaspringtest.Spring.Database.Mybatis.MybatisMemberRepository">
 
-    <resultMap id="MemberResultMap" type="projecttest.javaspringtest.Database.Mybatis.MybatisMember">
+    <resultMap id="MemberResultMap" type="projecttest.javaspringtest.Spring.Database.Mybatis.MybatisMember">
         <id     property="id"      column="id"/>
         <result property="loginid" column="loginid"/>
         <result property="password" column="password"/>
         <result property="role"    column="role"/>
     </resultMap>
 
-    <insert id="insert" parameterType="projecttest.javaspringtest.Database.Mybatis.MybatisMember"
+    <insert id="insert" parameterType="projecttest.javaspringtest.Spring.Database.Mybatis.MybatisMember"
             useGeneratedKeys="true" keyProperty="id">
         INSERT INTO mybatismember (loginid, password, role)
         VALUES (#{loginid}, #{password}, #{role})
@@ -36,7 +36,7 @@
         ORDER BY id DESC
     </select>
 
-    <update id="update" parameterType="projecttest.javaspringtest.Database.Mybatis.MybatisMember">
+    <update id="update" parameterType="projecttest.javaspringtest.Spring.Database.Mybatis.MybatisMember">
         UPDATE mybatismember
         SET loginid = #{loginid},
             password = #{password},

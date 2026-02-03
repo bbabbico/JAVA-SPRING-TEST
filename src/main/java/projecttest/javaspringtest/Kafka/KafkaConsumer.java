@@ -3,7 +3,7 @@ package projecttest.javaspringtest.Kafka;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import projecttest.javaspringtest.Database.Mybatis.MybatisMember;
+import projecttest.javaspringtest.Spring.Database.Mybatis.MybatisMember;
 import projecttest.javaspringtest.Kafka.Dto.UserDto;
 
 import static projecttest.javaspringtest.Kafka.KafkaTopicConfig.MYBATIS_TOPIC;

@@ -12,7 +12,7 @@ services:
 
   kafka:
     image: confluentinc/cp-kafka:7.6.1
-    container_name: kafka
+    container_name: Kafka
     depends_on:
       - zookeeper
     ports:
@@ -43,5 +43,14 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     restart: always
+  Grafana:
+    image: grafana/grafana:latest
+    container_name: Grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - Prometheus
+    restart: always
+
 volumes:
   kafka-data:

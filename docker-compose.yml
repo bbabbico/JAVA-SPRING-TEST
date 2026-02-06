@@ -32,6 +32,16 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     volumes:
       - kafka-data:/var/lib/kafka/data
-
+  Prometheus:
+    image: prom/prometheus:latest
+    container_name: Prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/data:/prometheus # 데이터 영속화
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    restart: always
 volumes:
   kafka-data:

@@ -13,5 +13,5 @@
 - JPA CRUD
 - Mybatis CRUD
 
-### 구동에 필요한 Kafka 서버 실행
+### 구동에 필요한 Kafka / Prometheus / Grafana 서버 실행
 `docker-compose up -d`
